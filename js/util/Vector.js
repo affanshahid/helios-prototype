@@ -14,3 +14,11 @@ function Vector(x, y) {
 Vector.prototype.add = function(vec) {
     return new Vector(this.x + vec.x, this.y + vec.y);
 };
+
+Vector.prototype.minus = function(vec) {
+    return new Vector(this.x - vec.x, this.y - vec.y);
+};
+
+Vector.prototype.scale = function(scalar) {
+    return new Vector(scalar * this.x, this.y * scalar);
+}
