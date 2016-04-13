@@ -38,6 +38,7 @@ var colorLegend = {
 var entityColorLegend = {
     'Player': 'red'
 };
+var obstacles = ['hill'];
 
 function createIntentions() {
     var keyCodes = { '87': 'up', '83': 'down', '65': 'left', '68': 'right' };
@@ -70,12 +71,12 @@ function runAnimation(f) {
     requestAnimationFrame(wrapper);
 }
 
-var world = new World(map, entityMap, backgroundLegend, entityLegend, createIntentions());
-var view = new MapView(world, colorLegend, entityColorLegend, 'container', { gridLines: false });
+var world = new World(map, entityMap, backgroundLegend, entityLegend, createIntentions(), obstacles);
+var view = new MapView(world, colorLegend, entityColorLegend, 'container', { gridLines: true });
 
-function gameLoop() {
-    world.cycle();
-    view.drawFrame();
+function gameLoop(step) {
+    world.cycle(step);
+    view.drawFrame(step);
 }
 
 runAnimation(gameLoop);
