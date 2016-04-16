@@ -1,11 +1,12 @@
-/*globals World, MapView, Player*/
+/*globals World, MapView, Player , Coin*/
 var backgroundLegend = {
     ' ': 'grass',
     '#': 'hill'
 };
 
 var entityLegend = {
-    '@': Player
+    '@': Player,
+    'o': Coin
 };
 
 var map = [
@@ -36,12 +37,13 @@ var colorLegend = {
 };
 
 var entityColorLegend = {
-    'Player': 'red'
+    'Player': 'red' ,
+    'Coin' : 'gold'
 };
 var obstacles = ['hill'];
 
 function createIntentions() {
-    var keyCodes = { '87': 'up', '83': 'down', '65': 'left', '68': 'right' };
+    var keyCodes = { '87': 'up', '83': 'down', '65': 'left', '68': 'right', '70': 'drop' };
     var intentions = Object.create(null);
 
     function handler(event) {

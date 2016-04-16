@@ -1,4 +1,4 @@
-/*globals Vector*/
+/*globals Vector Coin*/
 
 /**
  * Represents world model
@@ -38,6 +38,9 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
         }));
     });
 }
+World.prototype.dropCoin=function (pos) {
+    this.entities.push(new Coin(pos,this));
+};
 /**
  * detect collisons
  * @param  {Vector} vec
