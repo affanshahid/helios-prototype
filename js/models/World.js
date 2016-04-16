@@ -1,4 +1,4 @@
-/*globals Vector Coin*/
+/*globals Vector Coin, Player*/
 
 /**
  * Represents world model
@@ -20,33 +20,39 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
     this.obstacles = obstacles;
     this.height = map.length;
     this.width = map[0].length;
+    var player;
 
-    map.forEach(function(line) {
+    map.forEach(function (line) {
         var row = [];
-        Array.prototype.forEach.call(line, (function(char) {
+        Array.prototype.forEach.call(line, (function (char) {
             row.push(backgroundLegend[char]);
         }));
         grid.push(row);
     });
 
-    entityMap.forEach(function(line, y) {
-        Array.prototype.forEach.call(line, (function(entityChar, x) {
+    entityMap.forEach(function (line, y) {
+        Array.prototype.forEach.call(line, (function (entityChar, x) {
 
             if (entityChar in entityLegend) {
-                entities.push(new entityLegend[entityChar](new Vector(x, y)));
+                var entity = new entityLegend[entityChar](new Vector(x, y));
+                if (entityLegend[entityChar] == Player)
+                    player = entity;
+                entities.push(entity);
             }
         }));
     });
+
+    this.player = player;
 }
-World.prototype.dropCoin=function (pos) {
-    this.entities.push(new Coin(pos,this));
+World.prototype.dropCoin = function (pos) {
+    this.entities.push(new Coin(pos, this));
 };
 /**
  * detect collisons
  * @param  {Vector} vec
  * @param  {Vector} size
  */
-World.prototype.handlingCollisions = function(vec, size) {
+World.prototype.handlingCollisions = function (vec, size) {
     var xStart = Math.floor(vec.x);
     var yStart = Math.floor(vec.y);
     var newPos = vec.add(size);
@@ -68,13 +74,13 @@ World.prototype.handlingCollisions = function(vec, size) {
 /**
  * One iteration in the world
  */
-World.prototype.cycle = function(step) {
+World.prototype.cycle = function (step) {
     var self = this;
 
     while (step > 0) {
         var thisStep = Math.min(this.maxStep, step);
         step -= thisStep;
-        this.entities.forEach(function(entity) {
+        this.entities.forEach(function (entity) {
             entity.act(thisStep, self, self.intentions);
         });
     }
