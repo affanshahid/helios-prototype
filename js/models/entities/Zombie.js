@@ -13,17 +13,28 @@ function Zombie(pos, pathFinder) {
 
 Zombie.prototype.act = function (step, world) {
     var self = this;
+
     var x = Math.floor(this.pos.x);
     var y = Math.floor(this.pos.y);
 
     var px = Math.floor(world.player.pos.x);
     var py = Math.floor(world.player.pos.y);
 
+
+
     this.pathFinder.findPath(x, y, px, py, function (path) {
         if (path == null) {
             return;
         } else {
-            var delta = new Vector(path[1].x - x, path[1].y - y);
+            var delta;
+            console.log(path.length);
+            if (path.length > 0)
+                delta = new Vector(path[1].x - x, path[1].y - y);
+            else {
+                var actualDX = world.player.pos.x - self.pos.x;
+                var actualDY = world.player.pos.y - self.pos.y;
+                delta = new Vector(actualDX, actualDY);
+            }
             self.move(step, world, delta);
         }
     });
