@@ -27,13 +27,13 @@ Zombie.prototype.act = function (step, world) {
             return;
         } else {
             var delta;
-            console.log(path.length);
-            if (path.length > 0)
+            if (path.length > 0) {
                 delta = new Vector(path[1].x - x, path[1].y - y);
+            }
             else {
                 var actualDX = world.player.pos.x - self.pos.x;
                 var actualDY = world.player.pos.y - self.pos.y;
-                delta = new Vector(actualDX, actualDY);
+                delta = new Vector(actualDX/Math.abs(actualDX), actualDY/Math.abs(actualDY));
             }
             self.move(step, world, delta);
         }
