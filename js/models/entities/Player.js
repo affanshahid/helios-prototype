@@ -9,7 +9,9 @@ function Player(posVec) {
     this.pos = posVec;
     this.size = new Vector(0.5, 0.5);
     this.coinCoolDownTimer = 1;
+    this.coinCollectingTimer = 3;
     this.lastDirection = {};
+    this.collectibles = ['Coin'];
 
 }
 /**
@@ -20,6 +22,7 @@ function Player(posVec) {
 Player.prototype.act = function (step, world, intentions) {
     this.move(step, world, intentions);
     this.throwCoin(step, world, intentions);
+    this.collectCoin(world, step);
 };
 
 /**
@@ -59,6 +62,24 @@ Player.prototype.throwCoin = function (step, world, intentions) {
 
     }
 
+
+};
+Player.prototype.collectCoin = function (world, step) {
+
+
+    world.entities.forEach(function (entity, index) {
+        if (entity.constructor.name == "Coin") {
+            if (this.pos.x + this.size.x > entity.pos.x &&
+                this.pos.x < entity.pos.x + entity.size.x &&
+                this.pos.y + this.size.y > entity.pos.y &&
+                this.pos.y < entity.pos.y + entity.size.y && entity.coolDown < 0) {
+                world.entities.splice(index, 1);
+                this.playerCoins++;
+                this.coinCollectingTimer = 3;
+
+            }
+        }
+    }, this);
 };
 
 Player.prototype.playerSpeed = 2.5;

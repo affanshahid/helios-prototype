@@ -55,8 +55,11 @@ var entityColorLegend = {
     'Player': 'red',
     'Coin': 'gold',
     'Zombie': 'green'
+
+
 };
 var obstacles = ['hill'];
+var collectibles = ['Coin'];
 
 function createIntentions() {
     var keyCodes = { '87': 'up', '83': 'down', '65': 'left', '68': 'right', '70': 'drop' };
@@ -89,7 +92,8 @@ function runAnimation(f) {
     requestAnimationFrame(wrapper);
 }
 
-var world = new World(map, entityMap, backgroundLegend, entityLegend, createIntentions(), obstacles);
+
+var world = new World(map, entityMap, backgroundLegend, entityLegend, createIntentions(), obstacles, collectibles);
 var view = new MapView(world, colorLegend, entityColorLegend, 'container', { gridLines: true, coordsOn: true });
 
 function gameLoop(step) {
