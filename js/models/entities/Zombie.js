@@ -10,6 +10,7 @@ function Zombie(pos, pathFinder) {
     this.size = new Vector(0.5, 0.5);
     this.temporaryGoal = pos;
 }
+
 /**
  * Zombie behavior, calculate shortest path to player asynchronously
  * and move
@@ -17,14 +18,12 @@ function Zombie(pos, pathFinder) {
  * @param  {number} step
  * @param  {World} world
  */
-
-
-
 Zombie.prototype.act = function (step, world) {
     this.move(step, world);
 };
+
 /**
- * Move zombie
+ * Move zombie using path-finding
  * @param  {number} step - time step
  * @param  {World} world
  * @param  {object} delta - direction of movement
