@@ -10,7 +10,9 @@ function Player(posVec) {
     this.size = new Vector(0.5, 0.5);
     this.speed = new Vector(0, 0);
     this.coinCoolDownTimer = 1;
-    this.lastDirection={};
+    this.coinCollectingTimer=3;
+    this.lastDirection = {};
+    this.collectibles = ['Coin'];
 
 }
 /**
@@ -21,6 +23,7 @@ function Player(posVec) {
 Player.prototype.act = function(step, world, intentions) {
     this.move(step, world, intentions);
     this.throwCoin(step, world, intentions);
+    this.collectCoin(world,step);
 };
 
 /**
@@ -39,7 +42,7 @@ Player.prototype.move = function(step, world, intentions) {
             if (dir == 'right') newPos = this.pos.add(new Vector(this.playerSpeed * step, 0));
             if (dir == 'up') newPos = this.pos.minus(new Vector(0, this.playerSpeed * step));
             if (dir == 'down') newPos = this.pos.add(new Vector(0, this.playerSpeed * step));
-            if (dir == 'drop') ;
+            if (dir == 'drop');
             else
                 if (!(world.handlingCollisions(newPos, this.size)))
                     this.pos = newPos;
@@ -51,23 +54,36 @@ Player.prototype.move = function(step, world, intentions) {
 Player.prototype.throwCoin = function(step, world, intentions) {
     if (this.coinCoolDownTimer > 0)
         this.coinCoolDownTimer -= step;
-    
+
     if (intentions['drop'] && this.playerCoins > 0 && this.coinCoolDownTimer < 0) {
-        var offset = new Vector(0,0.5);
+        var offset = new Vector(0, 0.5);
         var newPos = offset.add(this.pos);
         world.dropCoin(newPos);
         this.playerCoins--;
         this.coinCoolDownTimer = 1;
 
     }
+    
 
 };
+Player.prototype.collectCoin = function(world,step) {
+    
+   
+    world.entities.forEach(function(entity,index) {
+        if(entity.constructor.name=="Coin" ) {
+           if (this.pos.x + this.size.x > entity.pos.x &&
+            this.pos.x < entity.pos.x + entity.size.x &&
+            this.pos.y + this.size.y > entity.pos.y &&
+            this.pos.y < entity.pos.y + entity.size.y && entity.coolDown <0)
+            {   
+                world.entities.splice(index,1);
+                this.playerCoins++;
+                this.coinCollectingTimer=3;
+               
+        }            }
+    },this);
 
-Player.prototype.checkIntention = function(intentions) {
-    for (var dir in intentions)
-        if (intentions[dir] == true)
-            return { direction: dir };
+  
 };
-
 Player.prototype.playerSpeed = 2.5;
 Player.prototype.playerCoins = 10;

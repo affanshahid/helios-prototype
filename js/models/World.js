@@ -9,7 +9,7 @@
  * @param  {object} entityLegend - an object to decode the entity-map characters to entities
  * @param  {object} intentions - describes user intentions
  */
-function World(map, entityMap, backgroundLegend, entityLegend, intentions, obstacles) {
+function World(map, entityMap, backgroundLegend, entityLegend, intentions, obstacles,collectibles) {
     if (map.length != entityMap.length || map[0].length != entityMap[0].length)
         throw new Error('Entity map and static map sizes do not match');
 
@@ -17,6 +17,7 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
     var grid = this.grid = [];
     var entities = this.entities = [];
     this.intentions = intentions;
+    this.collectibles=collectibles;
     this.obstacles = obstacles;
     this.height = map.length;
     this.width = map[0].length;
