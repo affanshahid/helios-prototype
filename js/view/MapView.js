@@ -25,7 +25,9 @@ function MapView(world, legend, entityLegend, containerId, opts) {
     };
     if (opts) {
         this.gridLines = opts.gridLines || false;
+        this.coordsOn = opts.coordsOn || false;
     } else {
+        this.coordsOn = false;
         this.gridLines = false;
     }
 
@@ -40,6 +42,7 @@ MapView.prototype._drawBackground = function () {
     var legend = this.legend;
     var scale = this._scale;
     var gridLines = this.gridLines;
+    var coordsOn = this.coordsOn;
 
     var view = this.viewport;
 
@@ -59,6 +62,10 @@ MapView.prototype._drawBackground = function () {
             cx.fillRect(xCoord, yCoord, scale, scale);
 
             if (gridLines) cx.strokeRect(xCoord, yCoord, scale, scale);
+            if (coordsOn) {
+                cx.fillStyle = 'white';
+                cx.fillText(x + ', ' + y, xCoord + 3, yCoord + 15);
+            }
         }
     }
 };

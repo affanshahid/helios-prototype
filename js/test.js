@@ -13,11 +13,11 @@ var entityLegend = {
 var map = [
     "###################",
     "#                 #",
-    "#                 #",
-    "#                 #",
-    "#                 #",
-    "#                 #",
-    "#                 #",
+    "#          #      #",
+    "#          ###    #",
+    "#            #    #",
+    "#            #    #",
+    "#          ##     #",
     "#                 #",
     "#                 #",
     "#                 #",
@@ -31,7 +31,7 @@ var map = [
 var entityMap = [
     "###################",
     "#                 #",
-    "#  Z         Z    #",
+    "#            Z    #",
     "#                 #",
     "#                 #",
     "#                 #",
@@ -40,7 +40,7 @@ var entityMap = [
     "#                 #",
     "#                 #",
     "#                 #",
-    "#  Z          Z   #",
+    "#                 #",
     "#                 #",
     "#                 #",
     "###################"
@@ -90,7 +90,7 @@ function runAnimation(f) {
 }
 
 var world = new World(map, entityMap, backgroundLegend, entityLegend, createIntentions(), obstacles);
-var view = new MapView(world, colorLegend, entityColorLegend, 'container', { gridLines: true });
+var view = new MapView(world, colorLegend, entityColorLegend, 'container', { gridLines: true, coordsOn: true });
 
 function gameLoop(step) {
     world.cycle(step);

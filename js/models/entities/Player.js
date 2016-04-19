@@ -26,23 +26,22 @@ Player.prototype.act = function (step, world, intentions) {
  * move player on map
  * @param  {Number} step
  * @param  {World} world
- * @param  {Object} intentions
+ * @param  {object} intentions
  */
 Player.prototype.move = function (step, world, intentions) {
 
     for (var dir in intentions) {
         if (intentions[dir] == true) {
-            var oldPos = this.pos;
             var newPos;
-            if (dir == 'left') newPos = this.pos.minus(new Vector(this.playerSpeed * step, 0));
-            if (dir == 'right') newPos = this.pos.add(new Vector(this.playerSpeed * step, 0));
-            if (dir == 'up') newPos = this.pos.minus(new Vector(0, this.playerSpeed * step));
-            if (dir == 'down') newPos = this.pos.add(new Vector(0, this.playerSpeed * step));
-            if (dir == 'drop');
-            else
+
+            if (dir == 'left') newPos = this.pos.add(Vector.directions.west.scale(this.playerSpeed * step));
+            if (dir == 'right') newPos = this.pos.add(Vector.directions.east.scale(this.playerSpeed * step));
+            if (dir == 'up') newPos = this.pos.add(Vector.directions.north.scale(this.playerSpeed * step));
+            if (dir == 'down') newPos = this.pos.add(Vector.directions.south.scale(this.playerSpeed * step));
+
+            if (newPos)
                 if (!(world.handlingCollisions(newPos, this.size)))
                     this.pos = newPos;
-                else this.pos = oldPos;
         }
     }
 };

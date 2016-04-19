@@ -102,7 +102,7 @@ World.prototype.createPathFinder = function (walkables) {
     var pathFinder = new EasyStar.js();
     pathFinder.setGrid(this.grid);
     pathFinder.setAcceptableTiles(walkables);
-    pathFinder.enableDiagonals();
+    //pathFinder.enableDiagonals();
     return pathFinder;
 };
 
