@@ -1,4 +1,4 @@
-/*globals Vector Coin, Player*/
+/*globals Vector Coin, Player, Zombie, EasyStar*/
 
 /**
  * Represents world model
@@ -21,6 +21,16 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
     this.height = map.length;
     this.width = map[0].length;
     var player;
+    var self = this;
+
+    var walkables = [];
+    for (var bgName in backgroundLegend) {
+        if (backgroundLegend.hasOwnProperty(bgName)) {
+            if (obstacles.indexOf(backgroundLegend[bgName]) == -1) {
+                walkables.push(backgroundLegend[bgName]);
+            }
+        }
+    }
 
     map.forEach(function (line) {
         var row = [];
@@ -34,9 +44,11 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
         Array.prototype.forEach.call(line, (function (entityChar, x) {
 
             if (entityChar in entityLegend) {
-                var entity = new entityLegend[entityChar](new Vector(x, y));
+                var entity;
                 if (entityLegend[entityChar] == Player)
-                    player = entity;
+                    player = entity = new entityLegend[entityChar](new Vector(x, y));
+                if (entityLegend[entityChar] == Zombie)
+                    entity = new entityLegend[entityChar](new Vector(x, y), self.createPathFinder(walkables));
                 entities.push(entity);
             }
         }));
@@ -85,4 +97,13 @@ World.prototype.cycle = function (step) {
         });
     }
 };
+
+World.prototype.createPathFinder = function (walkables) {
+    var pathFinder = new EasyStar.js();
+    pathFinder.setGrid(this.grid);
+    pathFinder.setAcceptableTiles(walkables);
+    //pathFinder.enableDiagonals();
+    return pathFinder;
+};
+
 World.prototype.maxStep = 0.05;

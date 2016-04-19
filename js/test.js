@@ -1,4 +1,4 @@
-/*globals World, MapView, Player , Coin*/
+/*globals World, MapView, Player ,Zombie,  Coin*/
 var backgroundLegend = {
     ' ': 'grass',
     '#': 'hill'
@@ -6,17 +6,18 @@ var backgroundLegend = {
 
 var entityLegend = {
     '@': Player,
-    'o': Coin
+    'o': Coin,
+    'Z': Zombie
 };
 
 var map = [
     "###################",
     "#                 #",
-    "#                 #",
-    "#                 #",
-    "#                 #",
-    "#                 #",
-    "#                 #",
+    "#          #      #",
+    "#          ###    #",
+    "#            #    #",
+    "#            #    #",
+    "#          ##     #",
     "#                 #",
     "#                 #",
     "#                 #",
@@ -30,12 +31,12 @@ var map = [
 var entityMap = [
     "###################",
     "#                 #",
-    "#                 #",
-    "#   @             #",
-    "#                 #",
+    "#            Z    #",
     "#                 #",
     "#                 #",
     "#                 #",
+    "#                 #",
+    "#       @         #",
     "#                 #",
     "#                 #",
     "#                 #",
@@ -51,8 +52,9 @@ var colorLegend = {
 };
 
 var entityColorLegend = {
-    'Player': 'red' ,
-    'Coin' : 'gold'
+    'Player': 'red',
+    'Coin': 'gold',
+    'Zombie': 'green'
 };
 var obstacles = ['hill'];
 
@@ -88,7 +90,7 @@ function runAnimation(f) {
 }
 
 var world = new World(map, entityMap, backgroundLegend, entityLegend, createIntentions(), obstacles);
-var view = new MapView(world, colorLegend, entityColorLegend, 'container', { gridLines: true });
+var view = new MapView(world, colorLegend, entityColorLegend, 'container', { gridLines: true, coordsOn: true });
 
 function gameLoop(step) {
     world.cycle(step);
