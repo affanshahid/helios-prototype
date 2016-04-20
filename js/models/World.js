@@ -96,12 +96,13 @@ World.prototype.cycle = function (step) {
         this.entities.forEach(function (entity) {
             entity.act(thisStep, self, self.intentions);
         });
+        this.cleanUpItems();
     }
-    this.cleanUpItems();
+
 };
 
 World.prototype.upgradeVillager = function (vill) {
-    this.entities.splice(this.entities.indexOf(vill, 1));
+    this.entities.splice(this.entities.indexOf(vill), 1);
     var vec = vill.pos.clone();
     var serf = new Serf(vec, this.createPathFinder(this.walkables));
     this.entities.push(serf);

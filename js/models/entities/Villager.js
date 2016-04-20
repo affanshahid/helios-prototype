@@ -1,4 +1,4 @@
-/*globals AIEntity, Vector, Coin*/
+/*globals AIEntity, Vector, Coin, Utils*/
 
 /**
  * An idle villager, ready to be converted to a serf
@@ -7,34 +7,34 @@
  */
 function Villager(pos, pathFinder) {
     AIEntity.call(this, pos, new Vector(0.35, 0.35), pathFinder);
-    this.cooldown = 0;
 }
 
 Villager.prototype = Object.create(AIEntity.prototype);
 Villager.prototype.constructor = Villager;
 /**
- * Villager behavior, attempt to move and collect coin and transform if able
+ * Villager behavior, attempt to roamForItems and collect coin and transform if able
  * @param  {number} step
  * @param  {World} world
  */
 Villager.prototype.act = function (step, world) {
-    this.move(step, world);
-    this.collectCoin(world);
+    this.roamForItems(step, world, Coin);
+    this.collectItem(world, Coin, world.upgradeVillager.bind(world, this));
 };
 
 
 /**
- * Attempt to move to closest coin or random spot within radius
+ * Attempt to roamForItems to closest coin or random spot within radius
  * @param  {number} step
  * @param  {World} world
+ * @param {constructor} Item
  */
-Villager.prototype.move = function (step, world) {
-    var foundCoins = this._lookupCoins(world);
-    if (foundCoins.length <= 0) {
+Villager.prototype.roamForItems = function (step, world, Item) {
+    var foundItems = this._lookupItem(world, Item);
+    if (foundItems.length <= 0) {
         if (!this.goal)
             this.goal = this._genRandomSpot(world);
     } else {
-        this.goal = this._getClosest(foundCoins);
+        this.goal = this._getClosest(foundItems);
     }
 
     if (this.goal) {
@@ -69,10 +69,10 @@ Villager.prototype._genRandomSpot = function (world) {
 };
 
 /**
- * Return list of coins that are in radius
  * @param  {World} world
+ * @param  {constructor} Item
  */
-Villager.prototype._lookupCoins = function (world) {
+Villager.prototype._lookupItem = function (world, Item) {
     var startY = Math.max(0, this.pos.y - this._radius);
     var endY = Math.min(this.pos.y + this._radius, world.grid.length - 1);
 
@@ -80,7 +80,7 @@ Villager.prototype._lookupCoins = function (world) {
     var endX = Math.min(this.pos.x + this._radius, world.grid[0].length - 1);
 
     return world.entities.filter(function (entity) {
-        return entity instanceof Coin && entity.pos.x >= startX && entity.pos.x <= endX
+        return Item && entity instanceof Item && entity.pos.x >= startX && entity.pos.x <= endX
             && entity.pos.y >= startY && entity.pos.y <= endY;
     });
 };
@@ -97,18 +97,19 @@ Villager.prototype._getClosest = function (entityList) {
         return distToCur < distToPrev ? cur : prev;
     });
 };
-
-Villager.prototype.collectCoin = function (world) {
+/**
+ * @param  {World} world
+ * @param  {constructor} item
+ * @param  {Function} cb
+ */
+Villager.prototype.collectItem = function (world, item, cb) {
     var self = this;
     world.entities.forEach(function (entity, index) {
-        if (entity instanceof Coin) {
-            if (this.pos.x + this.size.x > entity.pos.x &&
-                this.pos.x < entity.pos.x + entity.size.x &&
-                this.pos.y + this.size.y > entity.pos.y &&
-                this.pos.y < entity.pos.y + entity.size.y && entity.coolDown < 0) {
+        if (entity instanceof item) {
+            if (Utils.detectCollision(this, entity) && entity.coolDown < 0) {
                 world.entities.splice(index, 1);
                 self.goal = null;
-                world.upgradeVillager(self);
+                cb(entity);
             }
         }
     }, this);

@@ -1,4 +1,4 @@
-/*globals Vector, Entity, Coin*/
+/*globals Vector, Entity, Coin, Utils*/
 
 /**
  * Main player in the game
@@ -24,7 +24,7 @@ Player.prototype.constructor = Player;
 Player.prototype.act = function (step, world, intentions) {
     this.move(step, world, intentions);
     this.throwCoin(step, world, intentions);
-    this.collectCoin(world, step);
+    this.collectCoin(world);
 };
 
 /**
@@ -66,17 +66,14 @@ Player.prototype.throwCoin = function (step, world, intentions) {
 
 
 };
-Player.prototype.collectCoin = function (world, step) {
+
+Player.prototype.collectCoin = function (world) {
     world.entities.forEach(function (entity, index) {
         if (entity instanceof Coin) {
-            if (this.pos.x + this.size.x > entity.pos.x &&
-                this.pos.x < entity.pos.x + entity.size.x &&
-                this.pos.y + this.size.y > entity.pos.y &&
-                this.pos.y < entity.pos.y + entity.size.y && entity.coolDown < 0) {
+            if (Utils.detectCollision(this, entity) && entity.coolDown < 0) {
                 world.entities.splice(index, 1);
                 this.playerCoins++;
                 this.coinCollectingTimer = 3;
-
             }
         }
     }, this);

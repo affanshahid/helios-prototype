@@ -1,4 +1,4 @@
-/*globals AIEntity, Vector, Coin*/
+/*globals AIEntity, Vector, Coin, Villager*/
 
 /**
  * An idle serf
@@ -7,10 +7,9 @@
  */
 function Serf(pos, pathFinder) {
     AIEntity.call(this, pos, new Vector(0.35, 0.35), pathFinder);
-    this.cooldown = 0;
 }
 
-Serf.prototype = Object.create(AIEntity.prototype);
+Serf.prototype = Object.create(Villager.prototype);
 Serf.prototype.constructor = Serf;
 /**
  * Serf behavior
@@ -18,5 +17,5 @@ Serf.prototype.constructor = Serf;
  * @param  {World} world
  */
 Serf.prototype.act = function (step, world) {
-
+    this.roamForItems(step, world, null);
 };
