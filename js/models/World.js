@@ -1,4 +1,4 @@
-/*globals Vector Coin, Player, Zombie, EasyStar*/
+/*globals Vector Coin, Player, Serf, EasyStar*/
 
 /**
  * Represents world model
@@ -32,7 +32,7 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
             }
         }
     }
-
+    this.walkables = walkables;
     map.forEach(function (line) {
         var row = [];
         Array.prototype.forEach.call(line, (function (char) {
@@ -48,7 +48,7 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
                 var entity;
                 if (entityLegend[entityChar] == Player)
                     player = entity = new entityLegend[entityChar](new Vector(x, y));
-                else 
+                else
                     entity = new entityLegend[entityChar](new Vector(x, y), self.createPathFinder(walkables));
                 entities.push(entity);
             }
@@ -98,6 +98,14 @@ World.prototype.cycle = function (step) {
         });
     }
     this.cleanUpItems();
+};
+
+World.prototype.upgradeVillager = function (vill) {
+    this.entities.splice(this.entities.indexOf(vill, 1));
+    var vec = vill.pos.clone();
+    var serf = new Serf(vec, this.createPathFinder(this.walkables));
+    this.entities.push(serf);
+
 };
 
 World.prototype.cleanUpItems = function () {

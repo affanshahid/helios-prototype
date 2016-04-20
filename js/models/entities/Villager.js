@@ -108,6 +108,7 @@ Villager.prototype.collectCoin = function (world) {
                 this.pos.y < entity.pos.y + entity.size.y && entity.coolDown < 0) {
                 world.entities.splice(index, 1);
                 self.goal = null;
+                world.upgradeVillager(self);
             }
         }
     }, this);

@@ -56,7 +56,8 @@ var entityColorLegend = {
     'Player': 'red',
     'Coin': 'gold',
     'Zombie': 'green',
-    'Villager': 'blue'
+    'Villager': 'blue',
+    'Serf': 'purple'
 
 
 };
