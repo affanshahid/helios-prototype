@@ -17,7 +17,7 @@ AIEntity.prototype.pathFindTo = function (step, world, goal) {
     
     var self = this;
     var size;
-    if (goal instanceof Entity) {
+    if ('pos' in goal) {
         size = goal.size;
         goal = goal.pos;
     } else {

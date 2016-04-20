@@ -48,7 +48,7 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
                 var entity;
                 if (entityLegend[entityChar] == Player)
                     player = entity = new entityLegend[entityChar](new Vector(x, y));
-                if (entityLegend[entityChar] == Zombie)
+                else 
                     entity = new entityLegend[entityChar](new Vector(x, y), self.createPathFinder(walkables));
                 entities.push(entity);
             }

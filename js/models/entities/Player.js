@@ -1,4 +1,4 @@
-/*globals Vector, Entity*/
+/*globals Vector, Entity, Coin*/
 
 /**
  * Main player in the game
@@ -67,10 +67,8 @@ Player.prototype.throwCoin = function (step, world, intentions) {
 
 };
 Player.prototype.collectCoin = function (world, step) {
-
-
     world.entities.forEach(function (entity, index) {
-        if (entity.constructor.name == "Coin") {
+        if (entity instanceof Coin) {
             if (this.pos.x + this.size.x > entity.pos.x &&
                 this.pos.x < entity.pos.x + entity.size.x &&
                 this.pos.y + this.size.y > entity.pos.y &&

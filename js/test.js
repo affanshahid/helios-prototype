@@ -1,4 +1,4 @@
-/*globals World, MapView, Player ,Zombie,  Coin*/
+/*globals World, MapView, Player ,Zombie,  Coin, Villager*/
 var backgroundLegend = {
     ' ': 'grass',
     '#': 'hill'
@@ -7,7 +7,8 @@ var backgroundLegend = {
 var entityLegend = {
     '@': Player,
     'o': Coin,
-    'Z': Zombie
+    'Z': Zombie,
+    'v': Villager
 };
 
 var map = [
@@ -41,7 +42,7 @@ var entityMap = [
     "#                 #",
     "#                 #",
     "#                 #",
-    "#                 #",
+    "#    v            #",
     "#                 #",
     "###################"
 ];
@@ -54,7 +55,8 @@ var colorLegend = {
 var entityColorLegend = {
     'Player': 'red',
     'Coin': 'gold',
-    'Zombie': 'green'
+    'Zombie': 'green',
+    'Villager': 'blue'
 
 
 };
