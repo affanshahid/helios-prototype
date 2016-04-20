@@ -1,4 +1,4 @@
-/*globals Vector*/
+/*globals Vector, Entity*/
 
 /**
  * Main player in the game
@@ -6,14 +6,16 @@
  * @param  {any} posVec - current position9
  */
 function Player(posVec) {
-    this.pos = posVec;
-    this.size = new Vector(0.5, 0.5);
+    Entity.call(this, posVec, new Vector(0.5, 0.5));
     this.coinCoolDownTimer = 1;
     this.coinCollectingTimer = 3;
     this.lastDirection = {};
     this.collectibles = ['Coin'];
 
 }
+
+Player.prototype = Object.create(Entity.prototype);
+Player.prototype.constructor = Player;
 /**
  * Player action
  * @param  {World} world
