@@ -12,7 +12,7 @@ Zombie.prototype = Object.create(AIEntity.prototype);
 Zombie.prototype.constructor = Zombie;
 
 /**
- * Zombie behavior, calculate shortest path to player asynchronously
+ * Zombie behavior
  * and move
  * 
  * @param  {number} step
@@ -23,7 +23,7 @@ Zombie.prototype.act = function (step, world) {
 };
 
 /**
- * Move zombie using path-finding
+ * Move zombie using path-finding to player
  * @param  {number} step - time step
  * @param  {World} world
  * @param  {object} delta - direction of movement

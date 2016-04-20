@@ -28,12 +28,12 @@ Vector.prototype.scale = function (scalar) {
     return new Vector(scalar * this.x, this.y * scalar);
 };
 
-Vector.prototype.distance = function (vector) {
+Vector.prototype.distanceTo = function (vector) {
     return Math.sqrt(Math.pow(this.x - vector.x, 2) + Math.pow(this.y - vector.y, 2));
 };
 
 Vector.prototype.magnitude = function () {
-    return this.distance(new Vector(0, 0));
+    return this.distanceTo(new Vector(0, 0));
 };
 
 Vector.prototype.getUnitVector = function () {
