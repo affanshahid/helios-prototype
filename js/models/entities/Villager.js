@@ -23,10 +23,11 @@ Villager.prototype.act = function (step, world) {
 
 
 /**
- * Attempt to roamForItems to closest coin or random spot within radius
+ * Attempt to roam for the item type specified or random spot within radius
+ * radius can be overriden
  * @param  {number} step
  * @param  {World} world
- * @param {constructor} Item
+ * @param {constructor} Item - type
  */
 Villager.prototype.roamForItems = function (step, world, Item) {
     var foundItems = this._lookupItem(world, Item);

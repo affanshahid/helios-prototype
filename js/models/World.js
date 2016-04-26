@@ -1,4 +1,4 @@
-/*globals Vector Coin, Player, Serf, EasyStar*/
+/*globals Vector Coin, Player, Serf, EasyStar, Building,Villager, Zombie, Utils*/
 
 /**
  * Represents world model
@@ -46,10 +46,16 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
 
             if (entityChar in entityLegend) {
                 var entity;
-                if (entityLegend[entityChar] == Player)
-                    player = entity = new entityLegend[entityChar](new Vector(x, y));
-                else
-                    entity = new entityLegend[entityChar](new Vector(x, y), self.createPathFinder(walkables));
+                var cons = entityLegend[entityChar];
+                if (cons == Player || cons == Building || cons == Coin) {
+                    entity = new cons(new Vector(x, y));
+                    if (cons == Player) {
+                        player = entity;
+                    }
+                }
+                else if (cons == Zombie || cons == Villager) {
+                    entity = new cons(new Vector(x, y), self.createPathFinder(walkables));
+                }
                 entities.push(entity);
             }
         }));
@@ -65,7 +71,8 @@ World.prototype.dropCoin = function (pos) {
  * @param  {Vector} vec
  * @param  {Vector} size
  */
-World.prototype.handlingCollisions = function (vec, size) {
+
+World.prototype._checkBackgroundCollision = function (vec, size) {
     var xStart = Math.floor(vec.x);
     var yStart = Math.floor(vec.y);
     var newPos = vec.add(size);
@@ -82,6 +89,23 @@ World.prototype.handlingCollisions = function (vec, size) {
         }
     }
     return false;
+};
+
+World.prototype._checkBuildingCollision = function (vec, size) {
+    var buildings = this.entities.filter(function (entity) {
+        return entity instanceof Building;
+    });
+
+    for (var i = 0; i < buildings.length; i++) {
+        if (Utils.detectCollision({ pos: vec, size: size }, buildings[i]) === true) {
+            return true;
+        }
+    }
+    return false;
+};
+
+World.prototype.handlingCollisions = function (vec, size) {
+    return this._checkBackgroundCollision(vec, size) || this._checkBuildingCollision(vec, size);
 };
 
 /**

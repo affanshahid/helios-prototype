@@ -1,4 +1,4 @@
-/*globals AIEntity, Vector, Coin, Villager*/
+/*globals AIEntity, Vector, Coin, Villager, Tool*/
 
 /**
  * An idle serf
@@ -17,5 +17,7 @@ Serf.prototype.constructor = Serf;
  * @param  {World} world
  */
 Serf.prototype.act = function (step, world) {
-    this.roamForItems(step, world, null);
+    this.roamForItems(step, world, Tool);
 };
+
+Serf.prototype._radius = 1000;
