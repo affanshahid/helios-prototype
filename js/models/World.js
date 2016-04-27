@@ -47,7 +47,7 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
             if (entityChar in entityLegend) {
                 var entity;
                 var cons = entityLegend[entityChar];
-                if (cons == Player || cons == Building || cons == Coin) {
+                if (cons == Player || cons.prototype instanceof Building || cons == Coin) {
                     entity = new cons(new Vector(x, y));
                     if (cons == Player) {
                         player = entity;
@@ -63,8 +63,8 @@ function World(map, entityMap, backgroundLegend, entityLegend, intentions, obsta
 
     this.player = player;
 }
-World.prototype.dropCoin = function (pos) {
-    this.entities.push(new Coin(pos, this));
+World.prototype.dropItem = function (pos, Type = Coin) {
+    this.entities.push(new Type(pos, this));
 };
 /**
  * detect collisons
@@ -91,21 +91,22 @@ World.prototype._checkBackgroundCollision = function (vec, size) {
     return false;
 };
 
-World.prototype._checkBuildingCollision = function (vec, size) {
+World.prototype._checkBuildingCollision = function (vec, size, entity) {
     var buildings = this.entities.filter(function (entity) {
         return entity instanceof Building;
     });
 
     for (var i = 0; i < buildings.length; i++) {
         if (Utils.detectCollision({ pos: vec, size: size }, buildings[i]) === true) {
+            buildings[i].collided(this, entity);
             return true;
         }
     }
     return false;
 };
 
-World.prototype.handlingCollisions = function (vec, size) {
-    return this._checkBackgroundCollision(vec, size) || this._checkBuildingCollision(vec, size);
+World.prototype.handlingCollisions = function (vec, size, entity) {
+    return this._checkBackgroundCollision(vec, size) || this._checkBuildingCollision(vec, size, entity);
 };
 
 /**
@@ -136,7 +137,7 @@ World.prototype.upgradeVillager = function (vill) {
 World.prototype.cleanUpItems = function () {
     this.entities.forEach(function (entity, index) {
         if (entity instanceof Coin) {
-            if (this.world.handlingCollisions(entity.pos, entity.size))
+            if (this.world.handlingCollisions(entity.pos, entity.size, entity))
                 this.world.entities.splice(index, 1);
         }
     });

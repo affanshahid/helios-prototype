@@ -45,7 +45,7 @@ Player.prototype.move = function (step, world, intentions) {
             if (dir == 'down') newPos = this.pos.add(Vector.directions.south.scale(this.playerSpeed * step));
 
             if (newPos)
-                if (!(world.handlingCollisions(newPos, this.size)))
+                if (!(world.handlingCollisions(newPos, this.size, this)))
                     this.pos = newPos;
         }
     }
@@ -58,7 +58,7 @@ Player.prototype.throwCoin = function (step, world, intentions) {
     if (intentions['drop'] && this.playerCoins > 0 && this.coinCoolDownTimer < 0) {
         var offset = new Vector(0, 0.5);
         var newPos = offset.add(this.pos);
-        world.dropCoin(newPos);
+        world.dropItem(newPos, Coin);
         this.playerCoins--;
         this.coinCoolDownTimer = 1;
 

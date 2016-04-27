@@ -21,3 +21,4 @@ Serf.prototype.act = function (step, world) {
 };
 
 Serf.prototype._radius = 1000;
+Serf.prototype._speed = 0.8;

@@ -56,7 +56,7 @@ AIEntity.prototype.pathFindTo = function (step, world, goal) {
         var nextStep = getNextStep(currentPos, next);
         var newPos = currentPos.add(nextStep);
 
-        if (!world.handlingCollisions(newPos, self.size)) {
+        if (!world.handlingCollisions(newPos, self.size, self)) {
             self.pos = newPos;
             if (this._tempGoal && Math.abs(this.pos.x - this._tempGoal.x) < 0.1 && Math.abs(this.pos.y - this._tempGoal.y) < 0.1)
                 this._tempGoal = null;
@@ -73,7 +73,7 @@ AIEntity.prototype.pathFindTo = function (step, world, goal) {
         } else if (path.length > 0) {
             nextStep = getNextStep(self.pos, new Vector(path[1]));
             newPos = self.pos.add(nextStep);
-            if (!world.handlingCollisions(newPos, self.size)) {
+            if (!world.handlingCollisions(newPos, self.size, self)) {
                 self.pos = newPos;
             } else {
                 self._tempGoal = new Vector(path[0].x + 0.15, path[0].y + 0.15);

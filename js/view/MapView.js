@@ -1,3 +1,5 @@
+/*globals Building*/
+
 /**
  * 2D map view 
  * @constructor
@@ -84,13 +86,21 @@ MapView.prototype._drawEntities = function () {
 
     this.world.entities.forEach(function (entity) {
         var entitySize = entity.size.scale(scale);
-        var x = (entity.pos.x - vp.left) * scale + entitySize.x / 2;
-        var y = (entity.pos.y - vp.top) * scale + entitySize.y / 2;
+
         cx.fillStyle = legend[entity.constructor.name];
-        cx.beginPath();
-        cx.ellipse(x, y, entitySize.x / 2, entitySize.y / 2, 0, 0, 2 * Math.PI);
-        cx.fill();
-        cx.stroke();
+        if (entity instanceof Building) {
+            let x = (entity.pos.x - vp.left) * scale;
+            let y = (entity.pos.y - vp.top) * scale;
+            cx.fillRect(x, y, entitySize.x, entitySize.y);
+            cx.strokeRect(x, y, entitySize.x, entitySize.y);
+        } else {
+            let x = (entity.pos.x - vp.left) * scale + entitySize.x / 2;
+            let y = (entity.pos.y - vp.top) * scale + entitySize.y / 2;
+            cx.beginPath();
+            cx.ellipse(x, y, entitySize.x / 2, entitySize.y / 2, 0, 0, 2 * Math.PI);
+            cx.fill();
+            cx.stroke();
+        }
     });
 };
 /**
